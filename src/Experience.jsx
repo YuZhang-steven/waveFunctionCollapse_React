@@ -1,5 +1,6 @@
 import { OrbitControls, Stage } from "@react-three/drei";
 import BasicBox from "./BasicBox";
+import RuleCreator from "./RuleCreator";
 import testList from "./testList";
 
 
@@ -10,6 +11,8 @@ export default function Experience(props) {
     const testCase = testList.test01
     // console.log(testCase);
     // 
+    const rules = RuleCreator(testCase)
+    console.log(rules);
     const boxBuild = (arr) => {
         let content = []
         for (let i = 0; i < arr.length; i++) {
