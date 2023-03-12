@@ -10,10 +10,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <>
     <Canvas
       camera={{
-        fov: 35,
+        fov: 50,
 
         near: 0.1,
         far: 100,//defualt 10
+        position: [8, 16, 10]
 
       }}
       shadows={true}
