@@ -21,6 +21,7 @@ function findNeighbor(arr, matrix, loc) {
 export default function RuleCreator(matrix) {
 
     const blocks = {}
+    let total_blocks = 0
 
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[0].length; j++) {
@@ -28,13 +29,15 @@ export default function RuleCreator(matrix) {
 
             if (key in blocks) {
                 blocks[key].count += 1
+                total_blocks += 1
 
             }
             else {
-
+                total_blocks += 1
                 blocks[key] = {
                     'count': 1,
-                    'rule': [new Set(), new Set(), new Set(), new Set()]
+                    'rule': [new Set(), new Set(), new Set(), new Set()],
+                    'weight': 0
                 }
 
             }
@@ -43,6 +46,13 @@ export default function RuleCreator(matrix) {
 
         }
     }
+
+    for (let obj in blocks) {
+
+
+        blocks[obj].weight = blocks[obj].count / total_blocks
+    }
+
 
 
 
