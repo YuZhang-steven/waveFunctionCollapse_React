@@ -15,10 +15,13 @@ export default function BasicBox(props) {
 
     return <mesh position={props.position}>
         <boxGeometry
-            args={[1, 1, 1]}
+            args={[0.9, 0.9, 0.9]}
         />
-        <meshBasicMaterial
+        <meshStandardMaterial
             color={boxcolor}
+            roughness={0.25}
+            metalness={0}
         />
+
     </mesh>
 }
