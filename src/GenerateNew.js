@@ -5,8 +5,10 @@ let width = 20
 let height = 10
 let final_weight = {}
 let current_weight = {}
+let collapsed = 0
 
 let result = []
+let rules = {}
 
 let nextCollapseQueue = []
 
@@ -36,15 +38,18 @@ let testlist = [
 
 ]
 
-export default function GenerateNew(rules, size) {
+export default function GenerateNew(rules_list, size) {
+
     width = size.width
     height = size.height
+    rules = rules_list
 
+    // console.log(rules)
     /**create and fill out the result array with null */
     for (let i = 0; i < width; i++) {
         result[i] = []
         for (let j = 0; j < height; j++) {
-            result[i][j] = null
+            result[i][j] = -1
         }
     }
 
@@ -53,8 +58,10 @@ export default function GenerateNew(rules, size) {
         final_weight[obj] = rules[obj].weight
         current_weight[obj] = 0
     }
-    console.log(result);
-    console.log(current_weight);
+    // console.log(result);
+    // console.log(current_weight);
+
+    nextCollapseQueue.push([1, 6])
 
     while (nextCollapseQueue.length !== 0) {
         reOrderQueue(nextCollapseQueue)
@@ -73,17 +80,74 @@ export default function GenerateNew(rules, size) {
  * if not, create block list and edit it
  */
 function collapse() {
-    const curr_loc = nextCollapseQueue[0]
-    let curr_list = result[curr_loc[0]][curr_loc[1]]
+    let x, y
+    [x, y] = nextCollapseQueue[0]
+    nextCollapseQueue.shift()
 
-    /** collapse */
-    curr_list = sortBlocks(curr_list)
-    result[curr_loc[0]][curr_loc[1]] = curr_list[0]
+    let curr_loc = result[x][y]
 
-    /** add surounding to the queue */
-    if (result[x - 1]) {
+    // console.log(rules);
 
+    //edge case 1: if current location don't have list(-1)
+    //build list
+    if (curr_loc === -1) {
+        result[x][y] = new Set(Object.keys(rules))
     }
+
+    /** 
+     * 
+     * collapse
+     *  
+     * */
+
+    result[x][y] = findCollapseResult(result[x][y])
+    // console.log(result[x][y]);
+    current_weight[result[x][y]] = (current_weight[result[x][y]] * collapsed + 1) / (collapsed + 1)
+    collapsed += 1
+
+
+    /** 
+     * 
+     * add surounding to the queue 
+     * 
+     * 
+     * */
+    const block_rule = rules[result[x][y]].rule
+    console.log(block_rule);
+
+    result[0][6] = ['r', 'g']
+
+    if (result[x - 1]) {
+        if (result[x - 1][y] === -1) {
+
+            result[x - 1][y] = Array.from(block_rule[0])
+            nextCollapseQueue.push([x - 1, y])
+        }
+        // console.log(result[x - 1][y]);
+
+
+        else if (Array.isArray(result[x - 1][y])) {
+            // for (let obj in result[x - 1][y]) {
+            //     if()
+            // }
+        }
+    }
+
+
+    // if (result[curr_loc[0] - 1][curr_loc[1]) {
+
+    //     if (result[x - 1][y] == -1) {
+    //         avail_list = []
+    //         for
+
+
+
+    //     }
+    //     else if (result[x - 1][y].isArray()) {
+
+    //     }
+
+    // }
 
 
 
@@ -100,12 +164,23 @@ function collapse() {
  * 
  *
  */
-function sortBlocks(arr) {
-    const sortRule = (a, b) => {
-        return (final_weight[a] - current_weight[a]) - (final_weight[b] - current_weight[b])
+
+function findCollapseResult(blockset) {
+    let max_gap = 0
+    let result
+
+    const sort = (obj) => {
+        // console.log(obj);
+        if (final_weight[obj] - current_weight[obj] > max_gap) {
+            max_gap = final_weight[obj] - current_weight[obj]
+            result = obj
+
+        }
     }
 
-    return arr.sort(sortRule)
+    blockset.forEach(sort)
+
+    return result
 }
 
 /**

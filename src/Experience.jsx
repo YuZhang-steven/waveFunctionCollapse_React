@@ -14,7 +14,7 @@ export default function Experience(props) {
     // 
     const rules = RuleCreator(testCase)
     const collapseResult = GenerateNew(rules, { width: 20, height: 35 })
-    // console.log(collapseResult)
+    console.log(collapseResult)
     // console.log(rules);
     const boxBuild = (arr) => {
         let content = []

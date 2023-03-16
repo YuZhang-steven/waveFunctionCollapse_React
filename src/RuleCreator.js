@@ -12,7 +12,7 @@ function findNeighbor(arr, matrix, loc) {
         arr[2].add(matrix[x][y - 1])
     }
     if (matrix[x][y + 1]) {
-        arr[2].add(matrix[x][y + 1])
+        arr[1].add(matrix[x][y + 1])
     }
     // console.log(x + y);
 
