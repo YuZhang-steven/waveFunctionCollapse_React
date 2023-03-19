@@ -61,11 +61,12 @@ export default function GenerateNew(rules_list, size) {
     // console.log(result);
     // console.log(current_weight);
 
-    nextCollapseQueue.push([1, 6])
+    nextCollapseQueue.push([15, 6])
 
     while (nextCollapseQueue.length !== 0) {
         reOrderQueue(nextCollapseQueue)
         collapse()
+        // console.log(nextCollapseQueue);
     }
 
     return result
@@ -115,42 +116,34 @@ function collapse() {
     const block_rule = rules[result[x][y]].rule
     console.log(block_rule);
 
-    result[0][6] = ['r', 'g']
+    result[0][6] = new Set(['r', 'g'])
+
+
 
     if (result[x - 1]) {
-        if (result[x - 1][y] === -1) {
+        let cell = result[x - 1][y]
+        const block_list = block_rule[0] //current block rule be checked
+        if (cell === -1) {
 
-            result[x - 1][y] = Array.from(block_rule[0])
-            nextCollapseQueue.push([x - 1, y])
+            cell = new Set(block_list) //add corisbond set in the block rule list to the pre_collapsed array
+            nextCollapseQueue.push([x - 1, y])//push the array location to the pre collapsed queue
         }
         // console.log(result[x - 1][y]);
 
+        /** if array location is already in the pre collpased condiont(already have possible block set) */
+        else if (cell instanceof Set) {
+            const delete_list = []
+            cell.forEach((value) => {
+                if (!(value in block_list)) {
+                    delete_list.push(value)
+                }
+            })
+            for (let val in delete_list) {
+                cell.delete(val)
+            }
 
-        else if (Array.isArray(result[x - 1][y])) {
-            // for (let obj in result[x - 1][y]) {
-            //     if()
-            // }
         }
     }
-
-
-    // if (result[curr_loc[0] - 1][curr_loc[1]) {
-
-    //     if (result[x - 1][y] == -1) {
-    //         avail_list = []
-    //         for
-
-
-
-    //     }
-    //     else if (result[x - 1][y].isArray()) {
-
-    //     }
-
-    // }
-
-
-
 
 
 }
