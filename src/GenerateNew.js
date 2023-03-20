@@ -62,7 +62,7 @@ export default function GenerateNew(rules_list, size) {
     // console.log(result);
     // console.log(current_weight);
 
-    nextCollapseQueue.push([3, 6])
+    nextCollapseQueue.push([10, 6])
 
     while (nextCollapseQueue.length !== 0) {
         reOrderQueue(nextCollapseQueue)
@@ -190,12 +190,19 @@ function collapse() {
 function findCollapseResult(blockset) {
     console.log('blockset');
     console.log(blockset);
-    let max_gap = 0
+    let max_gap = Number.MIN_SAFE_INTEGER //The gap can less than 0, if all current possible block more than it should have. still need collapse
     let result
 
     const sort = (obj) => {
-        // console.log(obj);
-        if (final_weight[obj] - current_weight[obj] > max_gap) {
+        console.log('obj');
+        console.log(obj);
+        console.log('final_weight');
+        console.log(final_weight[obj]);
+        console.log('current_weight');
+        console.log(current_weight[obj]);
+        console.log('maxgap');
+        console.log(max_gap);
+        if (final_weight[obj] - current_weight[obj] >= max_gap) {
             max_gap = final_weight[obj] - current_weight[obj]
             result = obj
 
