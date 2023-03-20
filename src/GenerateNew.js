@@ -5,7 +5,7 @@ let width = 20
 let height = 10
 let final_weight = {}
 let current_weight = {}
-let collapsed = 0
+let collapsed
 
 let result = []
 let rules = {}
@@ -43,6 +43,7 @@ export default function GenerateNew(rules_list, size) {
     width = size.width
     height = size.height
     rules = rules_list
+    collapsed = 0
 
     // console.log(rules)
     /**create and fill out the result array with null */
@@ -61,7 +62,7 @@ export default function GenerateNew(rules_list, size) {
     // console.log(result);
     // console.log(current_weight);
 
-    nextCollapseQueue.push([15, 6])
+    nextCollapseQueue.push([3, 6])
 
     while (nextCollapseQueue.length !== 0) {
         reOrderQueue(nextCollapseQueue)
@@ -82,19 +83,31 @@ export default function GenerateNew(rules_list, size) {
  */
 function collapse() {
     let x, y
+
     [x, y] = nextCollapseQueue[0]
     nextCollapseQueue.shift()
 
     let curr_loc = result[x][y]
+
+    console.log('curr_loc');
+    console.log(x);
+    console.log(y);
+
 
     // console.log(rules);
 
     //edge case 1: if current location don't have list(-1)
     //build list
     if (curr_loc === -1) {
+        console.log('curr_loc -1');
+
         result[x][y] = new Set(Object.keys(rules))
     }
+    else {
+        console.log('curr_loc -100000000000');
+        console.log(curr_loc);
 
+    }
     /** 
      * 
      * collapse
@@ -113,18 +126,28 @@ function collapse() {
      * 
      * 
      * */
-    const block_rule = rules[result[x][y]].rule
-    console.log(block_rule);
 
-    result[0][6] = new Set(['r', 'g'])
+    // console.log('x' + parseInt(x));
+    console.log('collapsed ' + parseInt(collapsed));
+    console.log('rule ');
+    console.log(result[x][y]);
+
+    console.log(current_weight)
+
+    const block_rule = rules[result[x][y]].rule//bug:blcock sometime is undefine
+
+
+    // result[0][6] = new Set(['r', 'g'])
 
 
 
     if (result[x - 1]) {
         let cell = result[x - 1][y]
+        console.log('cell');
+        console.log(cell);
         const block_list = block_rule[0] //current block rule be checked
         if (cell === -1) {
-
+            console.log('case01');
             cell = new Set(block_list) //add corisbond set in the block rule list to the pre_collapsed array
             nextCollapseQueue.push([x - 1, y])//push the array location to the pre collapsed queue
         }
@@ -132,6 +155,9 @@ function collapse() {
 
         /** if array location is already in the pre collpased condiont(already have possible block set) */
         else if (cell instanceof Set) {
+            console.log('case02');
+
+
             const delete_list = []
             cell.forEach((value) => {
                 if (!(value in block_list)) {
@@ -143,6 +169,9 @@ function collapse() {
             }
 
         }
+        result[x - 1][y] = cell
+        console.log('result[x - 1][y]');
+        console.log(result[x - 1][y]);
     }
 
 
@@ -159,6 +188,8 @@ function collapse() {
  */
 
 function findCollapseResult(blockset) {
+    console.log('blockset');
+    console.log(blockset);
     let max_gap = 0
     let result
 
@@ -173,6 +204,8 @@ function findCollapseResult(blockset) {
 
     blockset.forEach(sort)
 
+    console.log('closed res');
+    console.log(result);
     return result
 }
 
